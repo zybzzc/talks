@@ -1,6 +1,6 @@
 # 编写高质量组件
 
-理解数据驱动，
+理解数据和事件驱动，
 编写高质量可复用的 Vue 组件的最佳实践与技巧
 
 <div class="abs-tr !mx-5 !my-8 flex flex-col">
@@ -40,112 +40,176 @@ layout: center
 class: text-center
 ---
 
-# Vue 与 MVVM 
+# Vue Composition API
 
-Vue 与 Model-View-ViewModel
-
----
-
-# 什么是 Vue 和 Vue 组件？
-
-Vue 一套用于构建用户界面的框架，它可以通过使用小型、独立和通常可复用的组件构建大型应用<br/>
-Vue 组件是带有名称的可复用 Vue 实例，几乎任意类型的应用界面都可以抽象为一个组件树
-
-<div class="grid grid-cols-2 items-center gap-x-4 mt-12">
-
-  - 维护一个对应视图的状态
-  - 将状态与外部提供的属性合并后通过一个幂等的函数转换为视图结构
-  - 响应用户在界面上的交互
-  - 针对用户的交互调用业务的逻辑，进而更新状态以达到视图变化的目的
-  
-  <img src="https://v3.cn.vuejs.org/images/components.png" class="m-auto"/>
-
-</div>
-
-<!-- 组件的职能 -->
----
-
-# Vue 与 MVVM
-
-MVVM 即 Model-View-ViewModel，是一种通过操控数据来操控视图的用户界面框架模型
-
-<div class="grid grid-cols-2 items-center gap-x-4 mt-12">
-
-  - Model: 域模型，用于持久化
-  - View: 作为视图模板存在
-  - ViewModel: 作为视图的模型，为视图服务
-
-  <img src="https://book.vue.tw/assets/img/1-1-mvvm.22bc0dc7.png" class="m-auto"/>
-
-</div>
-
-<div class="text-sm leading-6 antialiased mt-12 bg-green-800 p-4 rounded">
-为什么要提到 MVVM 呢？因为 Vue 没有完全遵循 MVVM 模型，在 MVVM 模型中，视图 View 的更改只能通过 ViewModel 的变更来触发。
-Vue 则提供了一些逃生仓（ref、$el等)，使用它们时会破坏掉 MVVM 模型。
-但是如果我们编码的时候完全遵循 MVVM 模型来写我们的组件，会使我们的组件变得非常的可控和易用
-</div>
+组合式 API
 
 ---
+clicks: 5
+---
 
-# 一个典型的 Vue 组件
+# 什么是 Vue 和 Vue 组件?
 
-水果选择器 FruitSelect
+Vue 一套用于构建用户界面的框架，它可以通过使用小型、独立和通常可复用的组件构建大型应用
+<img src="https://v3.cn.vuejs.org/images/components.png" class="w-40 ta-center"/>
+Vue 组件是
 
-<div class="grid grid-cols-[2fr,1fr] gap-x-4">
+<div class="grid grid-cols-2 gap-x-4">
 
-```tsx {all|2-7|11-15|12|14|all}
-<script setup lang="ts">
-  const value = null
-  const options = [
-    { label: '🍐', value: 'Pear' },
-    { label: '🍊', value: 'Orange' },
-    { label: '🍎', value: 'Apple' },
-  ]
+```html {all|3,7,8,12,13,17|4-6|8-12|13-17|all} {at:0}
+<script>
+export default {
+  data() {
+    return {
+      dark: false
+    }
+  },
+  computed: {
+    light() {
+      return !this.dark
+    }
+  },
+  methods: {
+    toggleDark() {
+      this.dark = !this.dark
+    }
+  }
+}
 </script>
-
-<template>
-  <Select
-    :placeholder="props.placeholder" // <-- 外部传入的参数
-    clearable
-    v-model="value" // <-- 会处把 value 赋值成用户选择的值
-    :options="options" />
-</template>
 ```
 
-  <div class="grid">
+```html {all|5,16|6,10|7,11|12-14|all} {at:0}
+<script>
+import { ref, computed } from 'vue'
 
-  <div>
-  <div v-click class="w-1/1">
+export default {
+  setup() {
+    const dark = ref(false)
+    const light = computed(() => !dark.value)
 
-  ```tsx
-  <FruitSelect placeholder="我请你吃..." />
-  ```
-
-  </div>
-
-  <FruitSelect v-click class="w-40" placeholder="我请你吃..." />
-  </div>
-
-  <div>
-  <div v-click class="w-1/1">
-
-  ```tsx
-  <FruitSelect placeholder="你请我吃..." />
-  ```
-
-  </div>
-
-  <FruitSelect v-click class="w-40" placeholder="你请我吃..." />
-  </div>
+    return {
+      dark,
+      light,
+      toggleDark() {
+        dark.value = !dark.value
+      }
+    }
+  }
+}
+</script>
+```
 
 </div>
+
+---
+clicks: 6
+---
+
+# 为什么引入组合式 API ？
+
+<div class="grid grid-cols-2 gap-x-4 gap-y-4">
+
+### 对象式 API 存在的问题
+
+### 组合式 API 提供的能力
+
+<v-clicks at="1">
+
+- 不利于复用
+- 潜在命名冲突
+- 上下文丢失
+- 有限的类型支持
+- 按 API 类型组织
+
+</v-clicks>
+
+<v-clicks at="1">
+
+- 极易复用 (原生 JS 函数)
+- 可灵活组合 (生命周期钩子可多次使用)
+- 提供更好的上下文支持
+- 更好的 TypeScript 类型支持
+- 按功能/逻辑组织
+- 可独立于 Vue 组件使用
+
+</v-clicks>
+
 </div>
 
-<!--
-可以看到组件实际配置的状态并没有完全体现视图所表现出来的所有状态，比如：下拉菜单是否打开、选择框是否高亮、尾部图标展示等
-这里就体现的就是组件的组合特性，这些状态都存在与组件内，不过是在 Select 组件中（某些状态甚至在 组成 Select 组件的子组件中）
-当然具体有哪些组件取决于你对 Select 的实现
--->
+---
+
+# 什么是可组合的函数
+
+可复用逻辑的集合，专注点分离
+
+<div class="grid grid-cols-[1fr,130px]">
+
+```ts {all|2,3|5-15|all}
+export function useDark(options: UseDarkOptions = {}) {
+  const preferredDark = usePreferredDark()              // <--
+  const store = useLocalStorage('vueuse-dark', 'auto')  // <--
+
+  return computed<boolean>({
+    get() {
+      return store.value === 'auto'
+        ? preferredDark.value
+        : store.value === 'dark'
+    },
+    set(v) {
+      store.value = v === preferredDark.value 
+        ? 'auto' : v ? 'dark' : 'light'
+    },
+  })
+}
+```
+
+<div class="grid">
+<DarkToggle class="m-auto"/>
+</div>
+
+</div>
+
+<div v-click class="abs-b mx-14 my-12">
+  <VueUse :names="['usePreferredDark', 'useLocalStorage', 'useDark']"/>
+</div>
+
+---
+
+# 组合关系
+
+```mermaid {theme:'dark'}
+graph LR;
+    useDark{{useDark}}-->usePreferredDark;
+    useDark-->useLocalStorage;
+    useLocalStorage-->useStorage;
+    useStorage-->useEventListener;
+    usePreferredDark-->useMediaQuery;
+    useMediaQuery-->useEventListener;
+```
+
+<div v-click class="mt-6">
+
+- 其中每一个函数都可以独立使用
+- 专注点分离
+
+</div>
+
+---
+
+# 建立"连结" <MarkerPattern />
+
+不同于 React，Vue 的 `setup()` 只会在组件建立时执行**一次**，并建立数据与逻辑之间的连结。
+
+- 建立 输入 → 输出 的连结
+- 输出会自动根据输入的改变而改变
+
+<div class="grid grid-cols-[auto,1fr] gap-4">
+  <Connections v-click class="mt-4"/>
+  <div v-click class="p-4">
+    <h3 class="pb-2">Excel 中的公式</h3>
+    <img class="h-40" src="https://cdn.wallstreetmojo.com/wp-content/uploads/2019/01/Division-Formula-in-Excel-Example-1-1.png">
+  </div>
+</div>
 
 ---
 layout: center
@@ -154,89 +218,99 @@ class: text-center
 
 # 模式和技巧
 
-编写可复用，可组合的高质量 Vue 组件
+编写可复用，可组合的逻辑
+
+---
+name: VueUse
+layout: center
+---
+
+<div class="grid grid-cols-[3fr,2fr] gap-4">
+  <div class="text-center pb-4">
+    <img class="h-50 inline-block" src="https://d33wubrfki0l68.cloudfront.net/a5780e53fee68ddd1cd73a00484151d2d052cb4d/b7469/logo-vertical.png">
+    <div class="opacity-50 mb-2 text-sm">
+      Vue 组合式 API 工具包
+    </div>
+    <div class="text-center">
+      <a class="!border-none" href="https://www.npmjs.com/package/@vueuse/core" target="__blank"><img class="h-4 inline mx-0.5" src="https://img.shields.io/npm/v/@vueuse/core?color=a1b858&label=" alt="NPM version"></a>
+      <a class="!border-none" href="https://www.npmjs.com/package/@vueuse/core" target="__blank"><img class="h-4 inline mx-0.5" alt="NPM Downloads" src="https://img.shields.io/npm/dm/@vueuse/core?color=50a36f&label="></a>
+      <a class="!border-none" href="https://vueuse.org" target="__blank"><img class="h-4 inline mx-0.5" src="https://img.shields.io/static/v1?label=&message=docs%20%26%20demos&color=1e8a7a" alt="Docs & Demos"></a>
+      <img class="h-4 inline mx-0.5" alt="Function Count" src="https://img.shields.io/badge/-114%20functions-13708a">
+      <br>
+      <a class="!border-none" href="https://github.com/vueuse/vueuse" target="__blank"><img class="mt-2 h-4 inline mx-0.5" alt="GitHub stars" src="https://img.shields.io/github/stars/vueuse/vueuse?style=social"></a>
+    </div>
+  </div>
+  <div class="border-l border-gray-400 border-opacity-25 !all:leading-12 !all:list-none my-auto">
+
+  - 同时兼容 Vue 2 和 Vue 3
+  - Tree-shakeable ESM
+  - TypeScript
+  - CDN 兼容
+  - 核心包含 110+ 组合式函数
+  - 丰富的生态系统 8+ 扩展包
+
+  </div>
+</div>
+
 
 ---
 
-- 最小数据变动原则
-- 最小数据原则
-- 单一职责
-- 单向数据流
-- 不可变数据
+<div class="grid grid-cols-2 gap-x-4"><div>
 
----
+# Ref
 
-# 最小数据变动原则
+```ts {monaco} {height: '155px'}
+import { ref } from 'vue'
 
-当事件要触发数据变动时，只改变最少量的数据
+let foo = 0
+let bar = ref(0)
 
-<div class="flex-row gap-x-4">
-
-  <div class="grid grid-flow-col items-center">
-  <div>
-    <FruitButtons />
-    <FruitSelect class="w-40 mt-1" useFruitPlaceholder />
-  </div>
-
-  ```tsx
-  <FruitButtons :value="fruit" @input="onChange" />
-  <FruitSelect :placeholder="placeholder" />
-  ```
-  </div>
-
-  <div class="grid grid-cols-2 gap-x-4 mt-4">
-
-  <v-clicks>
-
-  ```tsx
-  const fruitsTable = {
-    'Pear': '梨',
-    'Orange': '橘子',
-    'Apple': '苹果',
-  }
-
-  const fruit = 'Apple'
-  const placeholder = '我想吃苹果'
-
-  function onChange(val) {
-    fruit = val
-    placeholder = '我想吃' + fruitsTable[val]
-  }
-  ```
-  </v-clicks>
-
-
-<v-clicks>
-
-```tsx {all|7-8|all}
-const fruitsTable = {
-  'Pear': '梨',
-  'Orange': '橘子',
-  'Apple': '苹果',
-}
-
-const fruit = 'Apple'
-const placeholder = computed(
-  () => '我想吃' + fruitsTable[val]
-)
-
-function onChange(val) {
-  fruit = val
-}
+foo = 1
+bar = 1 // ts-error
 ```
 
-</v-clicks>
+<div class="mt-4" v-click>
+
+### Pros
+
+- 显式调用，类型检查
+- 相比 Reactive 局限更少
+
+### Cons
+
+- `.value`
 
 </div>
 
-</div>
+</div><div>
 
-<!--
-1.数据操控视图的部分是自动的，因为视图是主动依赖数据，绑定器会在数据更新的时候去更新视图
-2.接着刚刚水果选择器的例子，假如我们现在在使用的时候需要根据用户选中的某个值来改变占位文本，我们可以这样做
-3.当用户在点击水果按钮组的时候，真正必须改变的值只有按钮组本身的值即 fruit，而对另一个组件 placeholder 的修改是因为当前我们有这样的业务需求
-4.所以我们这里在用户点击水果按钮组时需要做的仅仅是改变 fruit 的值，至于 placeholder，需要在另一个地方显示定义出它与 fruit 存在的这种依赖关系，在 Vue 中我们可以使用计算属性
--->
+# Reactive
+
+```ts {monaco} {height: '155px'}
+import { reactive } from 'vue'
+
+const foo = { prop: 0 }
+const bar = reactive({ prop: 0 })
+
+foo.prop = 1
+bar.prop = 1
+```
+
+<div class="mt-4" v-click>
+
+### Pros
+
+- 自动 Unwrap (即不需要 `.value`)
+
+### Cons
+
+- 在类型上和一般对象没有区别
+- 使用 ES6 解构会使响应性丢失
+- 需要使用箭头函数包装才能使用 `watch`
+
+</div>
+</div></div>
+
 ---
 
 # Ref 自动解包 <MarkerCore />
@@ -1141,3 +1215,76 @@ class: 'text-center pb-5 :'
 # 谢谢！
 
 幻灯片可以在我的网站 [antfu.me](https://antfu.me) 上下载
+
+
+# 数据单一职责
+
+组件 ViewModel 中的一份数据只承载一个对应的职能 
+
+<div class="flex-row gap-x-4">
+
+  <div class="grid grid-flow-col items-center">
+  <div>
+    <WordsPuzzle />
+  </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-x-2 mt-4">
+
+  <v-clicks>
+
+```tsx {all|1-6,14|8-9,15-16|all}
+const words = [
+  {key: 'I', name: '我'},
+  {key: 'a', name: '一把'},
+  {key: 'have', name: '有'},
+  {key: 'umbrella', name: '花伞'},
+]
+
+const sortedWords = [...words] // <--
+const selectedWords = [...words] // <--
+
+function toggleWord(wordKey) {/* ... */}
+
+<WordsPuzzle
+  :words="words"
+  :sortedWords="sortedWords"
+  :selectedWords="selectedWords"
+  @sort="words => sortedWords = words"
+  @select="wordKey => toggleWord(wordKey)"
+/>
+```
+  </v-clicks>
+
+  <v-clicks>
+
+```tsx {all|1-6,12|all}
+const words = [
+  {key: 'I', name: '我', checked: true, order: 0},
+  {key: 'a', name: '一把', checked: true, order: 1},
+  {key: 'have', name: '有', checked: true, order: 2},
+  {key: 'umbrella', name: '花伞', checked: true, order: 3},
+]
+
+function resort(workKey, newIdx) {/* ... */}
+function toggleWord(wordKey) {/* ... */}
+
+<WordsPuzzle
+  :words="words"
+  @sort="(wordKey, newIdx) => resort(wordKey, newIdx)"
+  @select="wordKey => toggleWord(wordKey)"
+/>
+```
+  </v-clicks>
+
+</div>
+
+</div>
+
+<!--
+1.原子性只该数据所携带的信息具有不可替代性, 无法从其它数据中计算得来
+2.浅拷贝的初始化存在引用陷阱, 当顶层属性是引用类型时对它们的后续操作可能会存在一些不易察觉的bug
+3.但是这样当我们的组件功能越来越多时,就会往 words 中添加越来越多的属性用于不同的功能, 这会导致后期对 words 的维护变得异常困难,每次开发局部功能的时候都要面对大量的无关属性
+并且这种直接添加字段方式也使得所有功能的数据都只能采取同一种结构, 表达能力也收到限制, 比如这里的 checked 不能直接体现所有已选中的词, order 也不能直接表示出顺序, 这些都可能会导致在数据绑定的时候需要额外的处理或者根本无法处理, 如果要拿到不同功能对应的完整表达数据的话势必又要建立相应的计算属性, 这也是成本
+-->
+---

@@ -22,11 +22,11 @@ const placeholder = computed(() => {
 const value = null
 const options = [
   {
-    label: '🍐',
+    label: '🍐',
     value: 'Pear',
   },
   {
-    label: '🍊',
+    label: '🍊',
     value: 'Orange',
   },
   {

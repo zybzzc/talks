@@ -28,12 +28,14 @@ importers:
       '@slidev/types': ^0.13.1
       naive-ui: ^2.12.0
       playwright-chromium: ^1.11.1
-      vue-tree-chart: ^1.2.9
+      vue-draggable-next: ^2.0.1
+      vue3-draggable: 2.0.9
     dependencies:
       '@slidev/cli': 0.13.1_playwright-chromium@1.11.1
       '@slidev/theme-default': 0.7.4
       naive-ui: 2.12.0
-      vue-tree-chart: 1.2.9
+      vue-draggable-next: 2.0.1
+      vue3-draggable: 2.0.9
     devDependencies:
       '@slidev/types': 0.13.1
       playwright-chromium: 1.11.1
@@ -2396,6 +2398,13 @@ packages:
       vue: 3.0.11
     dev: false
 
+  /vue-draggable-next/2.0.1:
+    resolution: {integrity: sha512-8+7gqNL0Vb4GpXBTtGQx8yAWhvn8y61aoDgKmZwDu8b5dFB2wlj1r5SWtbqV26rwg6R8FRHVdlo55lwaOA51wA==}
+    peerDependencies:
+      sortablejs: ^1.13.0
+      vue: ^3.0.5
+    dev: false
+
   /vue-router/4.0.8_vue@3.0.11:
     resolution: {integrity: sha512-42mWSQaH7CCBQDspQTHv63f34VEnZC20g9QNK4WJ/zW8SdIUeT6TQ2i/78fjF/pVBUPLBWrGhvB7uDnaz7O/pA==}
     peerDependencies:
@@ -2409,22 +2418,18 @@ packages:
     resolution: {integrity: sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==}
     dev: false
 
-  /vue-tree-chart/1.2.9:
-    resolution: {integrity: sha512-agPPR0cJwvQEH0iVN25zmQydGZSiYgqIxHqdzDOl3UuAG4iQoHbnBpoo1sSU+IvlUEEI+vuCZ3hDXad/pfQcew==}
-    dependencies:
-      vue: 2.6.14
-    dev: false
-
-  /vue/2.6.14:
-    resolution: {integrity: sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==}
-    dev: false
-
   /vue/3.0.11:
     resolution: {integrity: sha512-3/eUi4InQz8MPzruHYSTQPxtM3LdZ1/S/BvaU021zBnZi0laRUyH6pfuE4wtUeLvI8wmUNwj5wrZFvbHUXL9dw==}
     dependencies:
       '@vue/compiler-dom': 3.0.11
       '@vue/runtime-dom': 3.0.11
       '@vue/shared': 3.0.11
+    dev: false
+
+  /vue3-draggable/2.0.9:
+    resolution: {integrity: sha512-OpjCSzGpkXsraBJzYrMS5LKXHThb0r+V8zItUNOZF7gZgdH0Cg2IL3XT0x4IhJdMaLvzRZCXE6UQj/459npJIw==}
+    peerDependencies:
+      vue: ^3.0.0
     dev: false
 
   /vueuc/0.4.8_@css-render+vue3-ssr@0.15.4:

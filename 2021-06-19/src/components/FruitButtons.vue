@@ -5,11 +5,11 @@ import { NConfigProvider, NRadioGroup, NRadioButton, darkTheme } from 'naive-ui'
 
 const options = [
   {
-    label: '🍐',
+    label: '🍐',
     value: 'Pear',
   },
   {
-    label: '🍊',
+    label: '🍊',
     value: 'Orange',
   },
   {
@@ -19,7 +19,6 @@ const options = [
 ]
 
 function handleInput(e: any) {
-  console.log(e.target.value)
   fruit.value = e.target.value
 }
 
