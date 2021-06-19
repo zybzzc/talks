@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "dev": "slidev",
-    "build": "slidev build --base /2021/vueconf-china/ --out ../../dist/2021/vueconf-china",
-    "export": "slidev export --dark --output ../2021-05-22-vueconf-china.pdf"
+    "build": "slidev build",
+    "export": "slidev export --dark --output ../2021-06-19-xiaojing0.pdf"
   },
   "dependencies": {
     "@slidev/cli": "^0.13.1",

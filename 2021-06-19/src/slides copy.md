@@ -1235,10 +1235,10 @@ class: 'text-center pb-5 :'
 
 ```tsx {all|1-6,14|8-9,15-16|all}
 const words = [
+  {key: 'umbrella', name: '花伞'},
   {key: 'I', name: '我'},
   {key: 'a', name: '一把'},
   {key: 'have', name: '有'},
-  {key: 'umbrella', name: '花伞'},
 ]
 
 const sortedWords = [...words] // <--
@@ -1260,10 +1260,10 @@ function toggleWord(wordKey) {/* ... */}
 
 ```tsx {all|1-6,12|all}
 const words = [
-  {key: 'I', name: '我', checked: true, order: 0},
-  {key: 'a', name: '一把', checked: true, order: 1},
-  {key: 'have', name: '有', checked: true, order: 2},
-  {key: 'umbrella', name: '花伞', checked: true, order: 3},
+  {key: 'umbrella', name: '花伞', checked: true, order: 0},
+  {key: 'I', name: '我', checked: true, order: 1},
+  {key: 'a', name: '一把', checked: true, order: 2},
+  {key: 'have', name: '有', checked: true, order: 3},
 ]
 
 function resort(workKey, newIdx) {/* ... */}

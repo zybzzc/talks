@@ -21,7 +21,7 @@ importers:
     devDependencies:
       playwright-chromium: 1.11.1
 
-  2021-05-22/src:
+  2021-06-19/src:
     specifiers:
       '@slidev/cli': ^0.13.1
       '@slidev/theme-default': ^0.7.4

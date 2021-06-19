@@ -1,7 +1,7 @@
 # 编写高质量组件
 
 理解数据驱动，
-编写高质量可复用的 Vue 组件的最佳实践与技巧
+编写高质量可复用的 Vue 组件
 
 <div class="abs-tr !mx-5 !my-8 flex flex-col">
   <img src="/xiaojing0.svg" class="w-32 m-auto">
@@ -160,7 +160,7 @@ class: text-center
 
 - 最少数据变动原则
 - 最小数据原则
-- 数据单一职责
+- 数据单一职能
 - 区分业务数据和视图数据
 - 消除副作用
 
@@ -260,10 +260,10 @@ function onChange(val) {
 
 ```tsx {all|1-6,14|8-9,15-16|all}
 const words = [
+  {key: 'umbrella', name: '花伞'},
   {key: 'I', name: '我'},
   {key: 'a', name: '一把'},
   {key: 'have', name: '有'},
-  {key: 'umbrella', name: '花伞'},
 ]
 
 const sortedWords = [...words] // <--
@@ -285,10 +285,10 @@ function toggleWord(wordKey) {/* ... */}
 
 ```tsx {all|1-6,12|all}
 const words = [
-  {key: 'I', name: '我', checked: true, order: 0},
-  {key: 'a', name: '一把', checked: true, order: 1},
-  {key: 'have', name: '有', checked: true, order: 2},
-  {key: 'umbrella', name: '花伞', checked: true, order: 3},
+  {key: 'umbrella', name: '花伞', checked: true, order: 0},
+  {key: 'I', name: '我', checked: true, order: 1},
+  {key: 'a', name: '一把', checked: true, order: 2},
+  {key: 'have', name: '有', checked: true, order: 3},
 ]
 
 function resort(workKey, newIdx) {/* ... */}
@@ -314,7 +314,7 @@ function toggleWord(wordKey) {/* ... */}
 -->
 ---
 
-# 数据单一职责
+# 数据单一职能
 
 组件 ViewModel 中的一份数据只承载一个对应的职能<br/>领域模型数据作为 `源数据` 的功能
 
@@ -344,6 +344,73 @@ function toggleWord(wordKey) {/* ... */}
 <!-- 这种模式下 sortedWordKeys 和 selectedWordKeys 既满足了 最小数据原则 也满足了 单一职责, 可以直接按照最合适的数据结构来定义不同功能对应的数据, 当要同时访问功能数据和源数据时则可以借助 compute 属性功能 或 某个组件内部的数据访问函数 -->
 ---
 
+# 区分业务数据和视图数据
+
+大多数情况一份数据同时作为业务数据和视图数据使用没有太大的问题，<br/>但极少数情况下这会给我的编码带来不必要的复杂度
+
+<div class="grid grid-cols-2 gap-x-2 mt-4">
+
+  <div>
+  <Pinyin character="雨" answer="yu"/>
+
+<v-clicks>
+
+```tsx {all|4|all}
+const pinyin = ''
+
+function onInput(val) {
+  if (!isValid(val)) return
+  pinyin = val
+}
+
+function submit() {
+  submitToServer(pinyin)
+}
+
+```
+</v-clicks>
+
+<v-clicks>
+
+```tsx {2|all}
+function submit() {
+  if (!isValid(pinyin)) return
+  submitToServer(pinyin)
+}
+
+```
+</v-clicks>
+
+  </div>
+
+  <div>
+  <Pinyin v-click character="晴" answer="qing" showStatus free />
+
+<v-clicks>
+
+```tsx {all|1,5|all}
+const value = ''
+
+function submit() {
+  if (!isValid(value)) return
+  const pinyin = convert(value)
+  submitToServer(pinyin)
+}
+
+```
+</v-clicks>
+
+<div v-click class="text-sm leading-6 antialiased bg-green-800 p-4 rounded">真正冲突最明显的是类似金额输入的地方，输入框的值是字符串，业务的值是数字，如果它们用同一个变量来驱动的话，
+数字转字符串可以直接转，但字符串却不是一定能转成正确的数字的，这种情况如果要在输入的过程中不停的校验输入数据并将其转换成业务数据，极大的提升了组件逻辑复杂度</div>
+</div>
+
+</div>
+
+<!--
+1.有一个输入汉字拼音的组件，我们分析一下它的状态..
+-->
+
+----
 
 # 消除副作用
 
@@ -379,11 +446,13 @@ computed 中出现副总用是 Vue 会发出警告
 
 - 最少数据变动原则
 - 最小数据原则
-- 数据单一职责
-- 区分业务数据和视图数据
+- 数据单一职能
+  - 区分业务数据和视图数据
 - 消除副作用
 
-
+<!--
+多个组件间数据如何共享或流转，怎么避免产生影子数据（明明是同一份数据，但是却存在于两个地方，它们可能数据结构是一样的也可能是不一样的，当它们的数据结构开始不一样时，也就是噩梦的开端）
+-->
 ---
 layout: center
 class: 'text-center pb-5 :'
@@ -391,4 +460,4 @@ class: 'text-center pb-5 :'
 
 # 谢谢！
 
-幻灯片可以访问 [这里](http://10.0.23.117/talks/2021-06-19) 查看
+幻灯片可以访问 [这里](http://10.0.1.225:8080) 查看

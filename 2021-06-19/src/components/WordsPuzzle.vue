@@ -10,6 +10,13 @@ const props = defineProps({
 const value = null
 const words = [
   {
+    label: '花伞',
+    value: '花伞',
+    checked: true,
+    type: "info",
+    color: '#70c0e8'
+  },
+  {
     label: '我',
     value: '我',
     checked: true,
@@ -29,13 +36,6 @@ const words = [
     checked: true,
     type: "error",
     color: '#e88080'
-  },
-  {
-    label: '花伞',
-    value: '花伞',
-    checked: true,
-    type: "info",
-    color: '#70c0e8'
   },
 ]
 
